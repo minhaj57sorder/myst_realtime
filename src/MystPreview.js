@@ -1,10 +1,17 @@
 import React from 'react';
-import { visit } from 'unist-util-visit';
 
 
-import { mystParse  } from 'myst-parser';
+// Core Myst Parser
 import { VFile } from 'vfile';
+import { mystParse  } from 'myst-parser';
 
+// Frontmatter rendering
+import { validatePageFrontmatter } from 'myst-frontmatter';
+import { FrontmatterBlock } from '@myst-theme/frontmatter';
+
+// Transformations
+import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
 import {
     mathPlugin,
     footnotesPlugin,
@@ -24,23 +31,22 @@ import {
     joinGatesPlugin
   } from 'myst-transforms';
 
-import { validatePageFrontmatter } from 'myst-frontmatter';
+// Article renders
+import { ReferencesProvider, ThemeProvider, Theme } from '@myst-theme/providers';
 
-
-import { unified } from 'unified';
-
-import { ThemeProvider, Theme, NodeRenderer  } from '@myst-theme/providers';
 import { MyST, DEFAULT_RENDERERS } from 'myst-to-react';
-import {cardDirective, gridDirective } from 'myst-ext-card';
-import { FrontmatterBlock } from '@myst-theme/frontmatter';
-import './MystPreview.css';
+import { cardDirective } from 'myst-ext-card';
 
+
+// Styling to the default Myst look (Borrowed from the Myst Sandbox)
+import './MystPreview.css';
 
 // Create a new component called MystPreview that takes a value prop and keeps it in state.
 function MystPreview(props) {
   const [value, setValue] = React.useState(props.value);
   const [value2, setValue2] = React.useState();
   const [frontmatter, setFrontmatter] = React.useState();
+  const [references_output, setReferences] = React.useState();
 
   
   const MYST_THEME = Theme.light;   
@@ -97,6 +103,7 @@ function MystPreview(props) {
     //setValue(props.value);
     setValue2(mdast);
     setFrontmatter(frontmatter)
+    setReferences({ ...references, article: mdast })
 
   }, [props.value]);
 
@@ -106,8 +113,10 @@ function MystPreview(props) {
         <div className="panel-wrapper">
             <div className="panel">
                 <ThemeProvider renderers={DEFAULT_RENDERERS} theme={MYST_THEME}>
-                    <FrontmatterBlock frontmatter={frontmatter} className='frontmatter'></FrontmatterBlock>
-                    <MyST ast={value2} />
+                    <ReferencesProvider references={references_output}>
+                        <FrontmatterBlock frontmatter={frontmatter} className='frontmatter'></FrontmatterBlock>
+                        <MyST ast={value2} />
+                    </ReferencesProvider>
                 </ThemeProvider>
             </div>
         </div>
