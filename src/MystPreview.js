@@ -43,7 +43,7 @@ import './MystPreview.css';
 
 // Create a new component called MystPreview that takes a value prop and keeps it in state.
 function MystPreview(props) {
-  const [value, setValue] = React.useState(props.value);
+  const [astNodes, setAstNodes] = React.useState(props.value);
   const [value2, setValue2] = React.useState();
   const [frontmatter, setFrontmatter] = React.useState();
   const [references_output, setReferences] = React.useState();
@@ -101,7 +101,7 @@ function MystPreview(props) {
     visit(mdast, (n) => delete n.position);
 
     //setValue(props.value);
-    setValue2(mdast);
+    setAstNodes(mdast);
     setFrontmatter(frontmatter)
     setReferences({ ...references, article: mdast })
 
@@ -115,7 +115,7 @@ function MystPreview(props) {
                 <ThemeProvider renderers={DEFAULT_RENDERERS} theme={MYST_THEME}>
                     <ReferencesProvider references={references_output}>
                         <FrontmatterBlock frontmatter={frontmatter} className='frontmatter'></FrontmatterBlock>
-                        <MyST ast={value2} />
+                        <MyST ast={astNodes} />
                     </ReferencesProvider>
                 </ThemeProvider>
             </div>

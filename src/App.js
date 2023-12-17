@@ -23,14 +23,19 @@ function App() {
   
   :::{important} Our Values
   We believe in a community-driven approach of open-source tools that are
-  composable and extensible. You can find out how to be involved in developing 
-  MyST Markdown by getting involved in the [Edssdsdd
-  
-  dsdsd
-  sds
-  dxecutableBooks][executable-books] project.
+  composable and extensible.
   :::
   
+  ## Including Figures and Images
+
+  :::{figure} https://source.unsplash.com/random/400x200?beach,ocean
+  :name: my-fig
+  :alt: Random image of the beach or ocean!
+  
+  Relaxing at the beach 🏝 🌊 😎
+  :::
+  
+
   :::{math}
   :label: foc
   
@@ -49,6 +54,21 @@ function App() {
     Nota N
   :::
   
+  ## Including Tables
+
+:::{list-table} This is a nice table!
+:header-rows: 1
+:name: example-table
+
+* - Training
+  - Validation
+* - 0
+  - 5
+* - 13720
+  - 2744
+:::
+
+And so we can reference the {numref}\`example-table\`
     
 
   `);
