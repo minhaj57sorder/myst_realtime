@@ -37,6 +37,13 @@ import { ReferencesProvider, ThemeProvider, Theme } from '@myst-theme/providers'
 import { MyST, DEFAULT_RENDERERS } from 'myst-to-react';
 import { cardDirective } from 'myst-ext-card';
 
+import { gridDirective } from 'myst-ext-grid';
+import { tabDirectives } from 'myst-ext-tabs';
+import { proofDirective } from 'myst-ext-proof';
+import { exerciseDirectives } from 'myst-ext-exercise';
+
+// vfile myst-parser myst-frontmatter @myst-theme/frontmatter @myst-theme/providers unified unist-util-visit myst-transforms myst-to-react myst-ext-card
+// myst-ext-grid myst-ext-tabs myst-ext-proof myst-ext-exercise
 
 // Styling to the default Myst look (Borrowed from the Myst Sandbox)
 import './MystPreview.css';
@@ -44,7 +51,6 @@ import './MystPreview.css';
 // Create a new component called MystPreview that takes a value prop and keeps it in state.
 function MystPreview(props) {
   const [astNodes, setAstNodes] = React.useState(props.value);
-  const [value2, setValue2] = React.useState();
   const [frontmatter, setFrontmatter] = React.useState();
   const [references_output, setReferences] = React.useState();
 
@@ -63,7 +69,13 @@ function MystPreview(props) {
     const file = new VFile();
     const mdast = mystParse(props.value, {
         markdownit: { linkify: true },
-        directives: [cardDirective],
+        directives: [cardDirective,
+        
+            gridDirective,
+            ...tabDirectives,
+            proofDirective,
+            ...exerciseDirectives,
+        ],
         // roles: [reactiveRole],
         vfile: file,
     });
